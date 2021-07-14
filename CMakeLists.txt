@@ -3,7 +3,7 @@ project(LeetCode)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(src)
+include_directories(include)
 
 set(SOURCE src/main.cpp)
 
