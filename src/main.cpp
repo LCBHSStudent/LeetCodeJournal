@@ -6,9 +6,11 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    vector<int> nums;
-
-    cout << Solution_96().numTrees(4);
+    for (int i = 0; i < 10000000; i++) {
+        Foo foo;
+        Foo::TestFoo(foo);
+        cout << endl;
+    }
 
     return 0;
 }

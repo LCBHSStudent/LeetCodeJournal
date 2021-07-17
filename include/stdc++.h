@@ -20,10 +20,13 @@
 #include <mutex>
 #include <chrono>
 #include <memory>
+#include <future>
+#include <functional>
 #include <string_view>
 
 using   std::array, std::vector, std::stack, std::bitset, std::pair, std::to_string,
         std::string, std::set, std::map, std::unordered_map, std::unordered_multimap,
-        std::tuple, std::multiset, std::string_view;
+        std::tuple, std::multiset, std::string_view, std::function, std::promise,
+        std::future, std::condition_variable, std::mutex, std::unique_lock, std::thread;
 
 #endif //LEETCODE_STDC_H
