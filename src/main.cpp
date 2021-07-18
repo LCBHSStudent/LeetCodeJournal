@@ -1,4 +1,4 @@
-#include "solutions/solution_07_17.hpp"
+#include "solutions/solution_07_18.hpp"
 #include "utils.hpp"
 
 #include <iostream>
@@ -6,11 +6,8 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    for (int i = 0; i < 10000000; i++) {
-        Foo foo;
-        Foo::TestFoo(foo);
-        cout << endl;
-    }
+    ZeroEvenOdd zeo(5);
+    ZeroEvenOdd::TestZeroEvenOdd(zeo);
 
     return 0;
 }

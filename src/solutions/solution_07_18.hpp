@@ -143,27 +143,71 @@ public:
     }
 };
 
+
+#define ZERO 0
+#define ODD  1
+#define EVEN 2
+
 class ZeroEvenOdd {
 private:
-    int n;
+    int n = 0;
+    atomic<int> curState;
 
 public:
-    ZeroEvenOdd(int n) {
-        this->n = n;
+    explicit ZeroEvenOdd(int _n): n(_n) {
+        curState.store(ZERO, std::memory_order_release);
     }
 
     // printNumber(x) outputs "x", where x is an integer.
     void zero(function<void(int)> printNumber) {
-
+        for (int i = 0; i < n; i++) {
+            while (curState.load(std::memory_order_acquire) != ZERO) {
+                std::this_thread::yield();
+            }
+            printNumber(0);
+            if (i % 2 == 0) {
+                curState.store(ODD, std::memory_order_release);
+            } else {
+                curState.store(EVEN, std::memory_order_release);
+            }
+        }
     }
 
     void even(function<void(int)> printNumber) {
-
+        for (int i = 2; i <= n; i += 2) {
+            while (curState.load(std::memory_order_acquire) != EVEN) {
+                std::this_thread::yield();
+            }
+            printNumber(i);
+            curState.store(ZERO, std::memory_order_release);
+        }
     }
 
     void odd(function<void(int)> printNumber) {
+        for (int i = 1; i <= n; i += 2) {
+            while (curState.load(std::memory_order_acquire) != ODD) {
+                std::this_thread::yield();
+            }
+            printNumber(i);
+            curState.store(ZERO, std::memory_order_release);
+        }
+    }
 
+    template<class T>
+    static void TestZeroEvenOdd(T& zeo) {
+        static const auto printNumber = [](int num) {
+            printf("%d ", num);
+        };
+        thread te(&T::even, &zeo, printNumber);
+        thread to(&T::odd, &zeo, printNumber);
+        thread tz(&T::zero, &zeo, printNumber);
+
+        tz.join(); te.join(); to.join();
     }
 };
+
+#undef ZERO
+#undef ODD
+#undef EVEN
 
 #endif //LEETCODE_SOLUTION_07_18_HPP
