@@ -2,8 +2,12 @@
 // Created by sword on 2021/7/3.
 //
 
-#include <ostream>
+#ifndef LEETCODE_UTILS_HPP
+#define LEETCODE_UTILS_HPP
+
+#include <iostream>
 #include <iterator>
+#include <chrono>
 
 template <typename T>
 std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
@@ -169,8 +173,29 @@ private:
     char lRegionSym = '[', rRegionSym = ']', splitter = ',';
 };
 
+#define LOG_DEBUG_TIME() RAIITimer __block_timer(__FUNCTION__)
 
-#ifndef LEETCODE_UTILS_HPP
-#define LEETCODE_UTILS_HPP
+class RAIITimer {
+    using Clock = std::chrono::high_resolution_clock;
+    using DurationType = std::chrono::microseconds;
+    using TimePoint = Clock::time_point;
+public:
+    explicit RAIITimer(const std::string& msg)
+        : m_msg(msg)
+    {
+        m_begin = Clock::now();
+    }
+
+    virtual ~RAIITimer() {
+        auto cur = Clock::now();
+        auto cost = std::chrono::duration_cast<DurationType>(cur - m_begin);
+
+        std::cout << "<" << m_msg << "> " << cost /* << typeid(DurationType).name() */ << std::endl;
+    }
+
+private:
+    TimePoint m_begin;
+    std::string m_msg;
+};
 
 #endif //LEETCODE_UTILS_HPP
