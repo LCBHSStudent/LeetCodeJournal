@@ -10,6 +10,7 @@
 #include <stack>
 #include <bitset>
 #include <string>
+#include <unordered_set>
 #include <algorithm>
 #include <set>
 #include <tuple>
@@ -27,6 +28,7 @@
 using   std::array, std::vector, std::stack, std::bitset, std::pair, std::to_string,
         std::string, std::set, std::map, std::unordered_map, std::unordered_multimap,
         std::tuple, std::multiset, std::string_view, std::function, std::promise,
-        std::future, std::condition_variable, std::mutex, std::unique_lock, std::thread;
+        std::future, std::condition_variable, std::mutex, std::unique_lock, std::thread,
+        std::unordered_set, std::unordered_multiset, std::atomic;
 
 #endif //LEETCODE_STDC_H
