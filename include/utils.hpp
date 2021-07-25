@@ -173,7 +173,11 @@ private:
     char lRegionSym = '[', rRegionSym = ']', splitter = ',';
 };
 
-#define LOG_DEBUG_TIME() RAIITimer __block_timer(__FUNCTION__)
+#if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
+#define LOG_DEBUG_TIME() RAIITimer __block_timer(__FUNCSIG__)
+#else
+#define LOG_DEBUG_TIME() RAIITimer __block_timer(__PRETTY_FUNCTION__)
+#endif
 
 class RAIITimer {
     using Clock = std::chrono::high_resolution_clock;
