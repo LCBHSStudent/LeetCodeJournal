@@ -158,4 +158,143 @@ public:
     }
 };
 
+class Solution_1713 {
+public:
+    int minOperations(vector<int>& target, vector<int>& arr) {
+        auto size = static_cast<int>(target.size());
+        unordered_map<int, int> hash;
+        for (int i = 0; i < size; ++i) {
+            hash[target[i]] = i;
+        }
+
+        // 查找最长递增子序列
+        vector<int> inc;
+        for (auto& val: arr) {
+            if (hash.count(val)) {
+                int idx = hash[val];
+                auto it = lower_bound(inc.begin(), inc.end(), idx);
+                if (it != inc.end()) {
+                    *it = idx;
+                } else {
+                    inc.push_back(idx);
+                }
+            }
+        }
+        return size - (int)inc.size();
+    }
+};
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution_671 {
+public:
+public:
+    int findSecondMinimumValue(TreeNode* root) {
+        int result = INT_MAX;
+        bool flag = false;
+
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while (!q.empty()) {
+            auto node = q.front();
+            q.pop();
+
+            if (node->val != root->val && node->val <= result) {
+                result = node->val;
+                flag = true;
+            }
+            // 如果左右子结点的值大于ans，就不用比较了，否则压入队列继续比较
+            if (node->left && node->left->val <= result) {
+                q.push(node->left);
+            }
+            if (node->right && node->right->val <= result) {
+                q.push(node->right);
+            }
+        }
+
+        return flag? result: -1;
+    }
+};
+
+class Solution_863 {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        vector<int> result;
+
+        if (root == nullptr) {
+            return {};
+        }
+        if (k == 0) {
+            return {target->val};
+        }
+        int distance = k;
+
+        // find距离为k的子节点
+        dfs(target, result, 0, distance);
+
+
+        if (root != target){
+            // 倒转二叉树
+            {
+                target->left = nullptr;
+                target->right = nullptr;
+                reverseTree(root, target);
+            }
+
+            // 再次find距离为k的子节点
+            dfs(target, result, 0, distance);
+        }
+        return result;
+    }
+
+    // 回溯 放置父节点到子节点
+    bool reverseTree(TreeNode* root, TreeNode* target){
+        if (root == nullptr) {
+            return false;
+        }
+        if (root == target) {
+            return true;
+        }
+
+        if (reverseTree(root->left, target)){
+            if(!root->left->left){
+                root->left->left = root;
+            }else if(!root->left->right){
+                root->left->right = root;
+            }
+            root->left = nullptr;
+            return true;
+        }
+
+        if (reverseTree(root->right, target)){
+            if (!root->right->left) {
+                root->right->left = root;
+            } else if (!root->right->right) {
+                root->right->right = root;
+            }
+            root->right = nullptr;
+            return true;
+        }
+        return false;
+    }
+
+    void dfs(TreeNode* root, vector<int>& result, int step, int distance){
+        if(!root) return;
+        if(step == distance){
+            result.push_back(root->val);
+        }
+        dfs(root->left, result, step+1, distance);
+        dfs(root->right, result, step+1, distance);
+    }
+
+};
+
 #endif //LEETCODE_SOLUTION_07_22_HPP
