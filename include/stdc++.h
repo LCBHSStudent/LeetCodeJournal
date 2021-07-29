@@ -7,6 +7,7 @@
 
 #include <array>
 #include <vector>
+#include <queue>
 #include <stack>
 #include <bitset>
 #include <string>
@@ -29,6 +30,6 @@ using   std::array, std::vector, std::stack, std::bitset, std::pair, std::to_str
         std::string, std::set, std::map, std::unordered_map, std::unordered_multimap,
         std::tuple, std::multiset, std::string_view, std::function, std::promise,
         std::future, std::condition_variable, std::mutex, std::unique_lock, std::thread,
-        std::unordered_set, std::unordered_multiset, std::atomic;
+        std::unordered_set, std::unordered_multiset, std::atomic, std::queue, std::priority_queue;
 
 #endif //LEETCODE_STDC_H
