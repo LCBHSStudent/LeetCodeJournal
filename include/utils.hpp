@@ -202,4 +202,57 @@ private:
     std::string m_msg;
 };
 
+template<class T>
+class NullNodeValue {
+public:
+    static constexpr auto NULL_NODE = "";
+};
+
+template<>
+class NullNodeValue<int> {
+public:
+    static constexpr auto NULL_NODE = INT_MAX;
+};
+
+
+template<class T>
+class BTreeGenerator {
+public:
+    const static auto NULL_NODE = NullNodeValue<T>::NULL_NODE;
+
+    struct TreeNode {
+        T val;
+        TreeNode *left;
+        TreeNode *right;
+        TreeNode() : val(0), left(nullptr), right(nullptr) {}
+        explicit TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+        TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+    };
+
+    static vector<TreeNode> genFromArray(const T* begin, size_t length) {
+        auto it = begin;
+
+        vector<TreeNode> list(length, TreeNode());
+
+        for (auto i = 0; i < length; i++) {
+            list[i].val = *(begin + i);
+
+            // has right
+            if (i * 2 + 2 < length && *(begin + (i * 2 + 2)) != NULL_NODE) {
+                list[i].right = list.data() + (i * 2 + 2);
+                // has left
+                if (i * 2 + 1 < length && *(begin + (i * 2 + 1)) != NULL_NODE) {
+                    list[i].left = list.data() + (i * 2 + 1);
+                } else {
+                    list[i].left = nullptr;
+                }
+            } else {
+                list[i].right = nullptr;
+            }
+        }
+
+        return list;
+    }
+};
+
 #endif //LEETCODE_UTILS_HPP
